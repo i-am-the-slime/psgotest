@@ -1,0 +1,6 @@
+github.com/elastic/go-elasticsearch/v8 v8.0.0-20191106142240-0b113bc5565f h1:QsLfhvnMrkS+oYPxiR7MLnFIFDebL3rrRkW1mg46DqI=
+github.com/elastic/go-elasticsearch/v8 v8.0.0-20191106142240-0b113bc5565f/go.mod h1:xe9a/L2aeOgFKKgrO3ibQTnMdpAeL0GC+5/HpGScSa4=
+github.com/purescript-native/go-ffi v0.0.0-20191015034244-22b13919279c h1:/kEuIwf4SPQgoXRNWvuKKdQYGnhNbfMN4xuOBZuHuwE=
+github.com/purescript-native/go-ffi v0.0.0-20191015034244-22b13919279c/go.mod h1:1TvaJdjRUFHRmoLQ5QvpR1pnivyd7eBjNA+j1PuktBM=
+github.com/purescript-native/go-runtime v0.0.0-20190907045917-ec626efcf4a1 h1:IUz6uZIjx6rNeadX18XTE2xmlku8YGoKt/+HisWq35U=
+github.com/purescript-native/go-runtime v0.0.0-20190907045917-ec626efcf4a1/go.mod h1:Pl7TR9c9Al8GMlY/R2D7joWjlQuTiB9eBN2a9aXd6GQ=
