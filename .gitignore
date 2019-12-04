@@ -18,3 +18,6 @@
 /frontend/.purs*
 /frontend/.psa*
 /frontend/.spago
+/frontend/.cache/
+/frontend/dist/
+/frontend/index.js

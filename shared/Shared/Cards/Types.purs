@@ -4,11 +4,10 @@ import Prelude
 
 import Data.Maybe (Maybe)
 import Effect (Effect)
-import Foreign (Foreign)
 
 type CardRepo
   = { write ∷ Card -> Effect Unit
-    , search ∷ Effect Foreign
+    , search ∷ Effect (Array Card)
     }
 
 type ImageUris

@@ -20,6 +20,31 @@ func init() {
 			}
 		}
 
+	exports["static"] = func(r_ Any) Any {
+		return func(route_ Any) Any {
+			return func(path_ Any) Any {
+				return func() Any {
+					route := route_.(string)
+					path := path_.(string)
+					r := r_.(*gin.Engine)
+					r.Static(route, path)
+					return nil
+				}
+			}
+		}
+	}
+
+	exports["noRoute"] = func(r_ Any) Any {
+		return func(handler_ Any) Any {
+			return func() Any {
+				r := r_.(*gin.Engine)
+				handler := handler_.(func(*gin.Context))
+				r.NoRoute(handler)
+				return nil
+			}
+		}
+	}
+
 	exports["getBodyImpl"] = func(ctx_ Any) Any {
 		ctx := ctx_.(*gin.Context)
 		var b Dict
@@ -39,6 +64,15 @@ func init() {
 				}
 			}
 		}
+
+	exports["sendFileImpl"] = func(path_ Any) Any {
+		return func(ctx_ Any) Any {
+			ctx := ctx_.(*gin.Context)
+			path := path_.(string)
+			ctx.File(path)
+			return nil
+		}
+	}
 
 	exports["getImpl"] = func(r_ Any) Any {
 		return func(path_ Any) Any {
