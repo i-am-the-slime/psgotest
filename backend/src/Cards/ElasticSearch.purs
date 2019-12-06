@@ -30,8 +30,8 @@ mkElasticSearchCardRepo = do
               (ES.DocId card.id)
               (ES.Body (writeJSON card))
         void $ ES.index client req
-    , search: do
-        res <- ES.search client (ES.Index "cards") (writeJSON exampleQuery)
+    , search: \str -> do
+        res <- ES.search client (ES.Index "cards") (writeJSON $ exampleQuery str)
         let results = JSON.read res
         let bla = results <#> (\(r ∷ Result Card) -> r.hits.hits <#> _._source)
         pure (either (\e -> let _ = spy "shit" (foldMap renderForeignError e) in []) identity bla)
@@ -76,8 +76,8 @@ type Result a
 json ∷ ∀ a. WriteForeign a => a -> Foreign
 json = write
 
-exampleQuery ∷ Foreign
-exampleQuery =
+exampleQuery ∷ String -> Foreign
+exampleQuery s =
   json
     { "size": 100
     -- , "_source": [ "name", "oracle_text", "mana_cost", "set_name", "img", "image_uris.large" ]
@@ -93,7 +93,7 @@ exampleQuery =
               }
           , json
               { "match":
-                { "oracle_text": "draw a card"
+                { "oracle_text": s
                 }
               }
           , json

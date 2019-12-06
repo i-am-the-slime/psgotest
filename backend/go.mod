@@ -14,7 +14,6 @@ replace project.localhost/i-am-the-slime/purescript-unicode => /Users/mark/code/
 
 require (
 	github.com/elastic/go-elasticsearch/v8 v8.0.0-20191106142240-0b113bc5565f
-	github.com/gin-gonic/gin v1.5.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/json-iterator/go v1.1.8 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
@@ -22,7 +21,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/purescript-native/go-ffi v0.0.0-20191015034244-22b13919279c // indirect
-	github.com/purescript-native/go-runtime v0.0.0-20190907045917-ec626efcf4a1 // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
 	golang.org/x/crypto v0.0.0-20191202143827-86a70503ff7e // indirect
 	golang.org/x/net v0.0.0-20191126235420-ef20fe5d7933 // indirect

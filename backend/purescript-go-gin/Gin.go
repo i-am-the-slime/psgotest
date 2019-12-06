@@ -20,7 +20,7 @@ func init() {
 			}
 		}
 
-	exports["static"] = func(r_ Any) Any {
+	exports["staticImpl"] = func(r_ Any) Any {
 		return func(route_ Any) Any {
 			return func(path_ Any) Any {
 				return func() Any {
@@ -34,7 +34,7 @@ func init() {
 		}
 	}
 
-	exports["noRoute"] = func(r_ Any) Any {
+	exports["noRouteImpl"] = func(r_ Any) Any {
 		return func(handler_ Any) Any {
 			return func() Any {
 				r := r_.(*gin.Engine)

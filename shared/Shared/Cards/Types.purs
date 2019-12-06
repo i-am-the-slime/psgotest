@@ -7,7 +7,7 @@ import Effect (Effect)
 
 type CardRepo
   = { write ∷ Card -> Effect Unit
-    , search ∷ Effect (Array Card)
+    , search ∷ String -> Effect (Array Card)
     }
 
 type ImageUris

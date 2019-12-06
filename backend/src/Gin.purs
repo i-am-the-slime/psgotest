@@ -3,9 +3,14 @@ module Gin where
 import Prelude
 
 import Cards.Types (CardRepo)
+import Control.Monad.RWS (RWST(..), lift)
+import Control.Monad.Reader (ReaderT(..), runReader, runReaderT)
+import Control.Monad.Trans.Class (class MonadTrans)
 import Data.Either (either)
 import Data.Foldable (foldMap)
+import Data.Newtype (class Newtype, overF)
 import Effect (Effect)
+import Effect.Class (class MonadEffect, liftEffect)
 import Effect.Uncurried (EffectFn1, runEffectFn1)
 import Effect.Unsafe (unsafePerformEffect)
 import Foreign (Foreign, renderForeignError)
@@ -14,64 +19,62 @@ import Simple.JSON as Json
 
 foreign import data Gin ∷ Type
 
-foreign import data Ctx ∷ Type
+foreign import data GinCtx ∷ Type
 
-foreign import data Handler ∷ Type
+foreign import data GinHandler ∷ Type
 
 foreign import mkDefaultGin ∷ Effect Gin
 
-foreign import mkHandler ∷ (Ctx -> Unit) -> Handler
+foreign import mkHandler ∷ (GinCtx -> Unit) -> GinHandler
 
-foreign import static ∷ Gin -> String -> String -> Effect Unit
+newtype HandlerM a = HandlerM (ReaderT GinCtx Effect a)
+derive instance ntHandlerM ∷ Newtype (HandlerM a) _
+derive newtype instance bindHandlerM ∷ Bind HandlerM
+derive newtype instance monadHandlerM ∷ Monad HandlerM
+derive newtype instance monadEffectHandlerM ∷ MonadEffect HandlerM
 
-foreign import noRoute ∷ Gin -> Handler -> Effect Unit
+toGinHandler ∷ HandlerM Unit -> GinHandler
+toGinHandler (HandlerM h) = mkHandler (unsafePerformEffect <<< runReaderT h)
 
-foreign import getImpl ∷ Gin -> String -> Handler -> Effect Unit
+newtype AppM a = AppM (ReaderT Gin Effect a)
+derive instance ntAppM ∷ Newtype (AppM a) _
+derive newtype instance bindAppM ∷ Bind AppM
+derive newtype instance monadAppM ∷ Monad AppM
 
-foreign import postImpl ∷ Gin -> String -> Handler -> Effect Unit
+foreign import staticImpl ∷ Gin -> String -> String -> Effect Unit
+static ∷ String -> String -> AppM Unit
+static route folder = AppM <<< ReaderT $ \gin -> staticImpl gin route folder
 
-get ∷ Gin -> String -> Handler -> Effect Unit
-get gin str f = getImpl gin str f
+foreign import noRouteImpl ∷ Gin -> GinHandler -> Effect Unit
+noRoute ∷ HandlerM Unit -> AppM Unit
+noRoute handler = AppM <<< ReaderT $ \gin -> noRouteImpl gin (toGinHandler handler)
 
-post ∷ Gin -> String -> Handler -> Effect Unit
-post gin str f = postImpl gin str f
+foreign import getImpl ∷ Gin -> String -> GinHandler -> Effect Unit
+get ∷ String -> HandlerM Unit -> AppM Unit
+get str h = AppM <<< ReaderT $ \gin -> getImpl gin str (toGinHandler h)
+
+foreign import postImpl ∷ Gin -> String -> GinHandler -> Effect Unit
+post ∷ String -> HandlerM Unit -> AppM Unit
+post str h = AppM <<< ReaderT $ \gin -> postImpl gin str (toGinHandler h)
+
+-- | Handler
+ginCtxToUnitToHandler ∷ ∀ a. (GinCtx -> a) -> HandlerM a
+ginCtxToUnitToHandler f = HandlerM (ReaderT (pure <$> f))
+
+foreign import sendFileImpl ∷ String -> GinCtx -> Unit
+sendFile ∷ String -> HandlerM Unit
+sendFile = ginCtxToUnitToHandler <<< sendFileImpl
+
+foreign import getBodyImpl ∷ GinCtx -> Foreign
+getBody ∷ ∀ r. ReadForeign { | r } => HandlerM (E { | r })
+getBody = HandlerM <<< ReaderT $ pure <$> (Json.read <<< getBodyImpl)
+
+foreign import sendJsonImpl ∷ Int -> Foreign -> GinCtx -> Unit
+sendJson ∷ ∀ r. WriteForeign (Record r) => Int -> Record r -> HandlerM Unit
+sendJson status r = ginCtxToUnitToHandler (sendJsonImpl status (Json.write r))
 
 foreign import runImpl ∷ EffectFn1 Gin Unit
-
-foreign import sendJsonImpl ∷ Int -> Foreign -> Ctx -> Unit
-
-foreign import getBodyImpl ∷ Ctx -> Foreign
-
-foreign import sendFileImpl ∷ String -> Ctx -> Unit
-
-getBody ∷ ∀ r. ReadForeign { | r } => Ctx -> E { | r }
-getBody = Json.read <<< getBodyImpl
-
-sendJson ∷ ∀ r. WriteForeign (Record r) => Int -> Record r -> Ctx -> Unit
-sendJson c r = sendJsonImpl c (Json.write r)
-
-run ∷ Gin -> Effect Unit
-run = runEffectFn1 runImpl
-
-handler ∷ Handler
-handler = mkHandler $ getBody >>= sendResponse
-
-cardHandler ∷ ∀ r. { cards ∷ CardRepo } -> Handler
-cardHandler { cards } =
-  mkHandler \ctx ->
-    sendJson 200 { cards: unsafePerformEffect cards.search } ctx
-
-sendResponse ∷ E { holz ∷ String } -> Ctx -> Unit
-sendResponse =
-  either
-    (foldMap renderForeignError >>> { error: _ } >>> sendJson 400)
-    (sendJson 200)
-
-server ∷ ∀ r. { cards ∷ CardRepo } -> Effect Unit
-server ctx = do
-  gin <- mkDefaultGin
-  get gin "/api/cards" (cardHandler ctx )
-  post gin "/pog" handler
-  static gin "/assets" "./assets"
-  noRoute gin (mkHandler (sendFileImpl "index.html"))
-  run gin
+run ∷ AppM Unit -> Gin -> Effect Unit
+run (AppM app) g = do
+  runReaderT app g
+  runEffectFn1 runImpl g

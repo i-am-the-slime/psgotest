@@ -6,7 +6,8 @@ import Cards.Types (CardRepo)
 import Effect (Effect)
 
 type Ctx
-  = { cards ∷ CardRepo }
+  = { cards ∷ CardRepo
+    }
 
 mkLiveCtx ∷ Effect Ctx
 mkLiveCtx = do

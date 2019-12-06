@@ -34,6 +34,8 @@ github.com/purescript-native/go-ffi v0.0.0-20191015034244-22b13919279c h1:/kEuIw
 github.com/purescript-native/go-ffi v0.0.0-20191015034244-22b13919279c/go.mod h1:1TvaJdjRUFHRmoLQ5QvpR1pnivyd7eBjNA+j1PuktBM=
 github.com/purescript-native/go-runtime v0.0.0-20190907045917-ec626efcf4a1 h1:IUz6uZIjx6rNeadX18XTE2xmlku8YGoKt/+HisWq35U=
 github.com/purescript-native/go-runtime v0.0.0-20190907045917-ec626efcf4a1/go.mod h1:Pl7TR9c9Al8GMlY/R2D7joWjlQuTiB9eBN2a9aXd6GQ=
+github.com/purescript-native/go-runtime v0.1.0 h1:6liwLEqu9oZhXE/ipAoKBgFi4g4SxjmXs7Whps/P7NQ=
+github.com/purescript-native/go-runtime v0.1.0/go.mod h1:Pl7TR9c9Al8GMlY/R2D7joWjlQuTiB9eBN2a9aXd6GQ=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.2.0/go.mod h1:qt09Ya8vawLte6SNmTgCsAVtYtaKzEcn8ATUoHMkEqE=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
