@@ -1,7 +1,6 @@
 module Cards.Types where
 
 import Prelude
-
 import Data.Maybe (Maybe)
 import Effect (Effect)
 
@@ -52,11 +51,13 @@ type Card
     , color_identity ∷ Array String
     , colors ∷ Maybe (Array String)
     , digital ∷ Boolean
+    , edhrec_rank ∷ Maybe Int
     , flavor_text ∷ Maybe String
     , foil ∷ Boolean
     , frame ∷ String
     , full_art ∷ Boolean
     , games ∷ Array String
+    , hand_modifier ∷ Maybe String
     , highres_image ∷ Boolean
     , id ∷ String
     , illustration_id ∷ Maybe String
@@ -64,6 +65,8 @@ type Card
     , lang ∷ String
     , layout ∷ String
     , legalities ∷ Legalities
+    , life_modifier ∷ Maybe String
+    , loyalty ∷ Maybe String
     , mana_cost ∷ Maybe String
     , multiverse_ids ∷ Array Int
     , name ∷ String
@@ -75,6 +78,7 @@ type Card
     , power ∷ Maybe String
     , prints_search_uri ∷ String
     , promo ∷ Boolean
+    , promo_types ∷ Maybe (Array String)
     , rarity ∷ String
     , related_uris ∷ RelatedUris
     , released_at ∷ String
@@ -95,4 +99,25 @@ type Card
     , type_line ∷ String
     , uri ∷ String
     , variation ∷ Boolean
+    , "watermark" ∷ Maybe String
+    }
+
+type CardFace
+  = { artist ∷ Maybe String -- The name of the illustrator of this card face. Newly spoiled cards may not have this field yet.
+    , color_indicator ∷ Array String -- The colors in this face’s color indicator, if any.
+    , colors ∷ Array String -- This face’s colors, if the game defines colors for the individual face of this card.
+    , flavor_text ∷ String -- The flavor text printed on this face, if any.
+    , illustration_id ∷ String -- A unique identifier for the card face artwork that remains consistent across reprints. Newly spoiled cards may not have this field yet.
+    , image_uris ∷ ImageUris -- An object providing URIs to imagery for this face, if this is a double-sided card. If this card is not double-sided, then the image_uris property will be part of the parent object instead.
+    , loyalty ∷ Maybe String -- This face’s loyalty, if any.
+    , mana_cost ∷ String --The mana cost for this face. This value will be any empty string "" if the cost is absent. Remember that per the game rules, a missing mana cost and a mana cost of {0} are different values.
+    , name ∷ String -- The name of this particular face. object String  A content type for this object, always card_face.
+    , oracle_text ∷ Maybe String -- The Oracle text for this face, if any.
+    , power ∷ Maybe String -- This face’s power, if any. Note that some cards have powers that are not numeric, such as *.
+    , printed_name ∷ Maybe String -- The localized name printed on this face, if any.
+    , printed_text ∷ Maybe String -- The localized text printed on this face, if any.
+    , printed_type_line ∷ Maybe String -- The localized type line printed on this face, if any.
+    , toughness ∷ Maybe String -- This face’s toughness, if any.
+    , type_line ∷ String -- The type line of this particular face.
+    , watermark ∷ Maybe String -- The watermark on this particulary card face, if any.
     }

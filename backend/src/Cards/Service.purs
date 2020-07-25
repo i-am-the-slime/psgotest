@@ -1,6 +1,7 @@
 module Cards.Service where
 
 import Prelude hiding (between)
+
 import Cards.Types (CardRepo, Card)
 import Control.Alt ((<|>))
 import Data.Array (replicate)
@@ -25,7 +26,7 @@ import Text.Parsing.Parser.String (class StringLike, string)
 parseAndSaveCards ∷ ∀ ctx. { cards ∷ CardRepo | ctx } -> String -> Effect Unit
 parseAndSaveCards { cards } str = do
   let
-    (parsed ∷ _ (Array Card)) = readJSON str
+    parsed = readJSON str ∷ _ (Array Card)
   either
     (intercalateMap ",\n" renderForeignError >>> log)
     (traverse_ cards.write)
@@ -141,7 +142,6 @@ digitsToInt = _.acc <<< foldr f { pos: 1, acc: 0 }
   where
   f d { pos, acc } = { pos: pos * 10, acc: d * pos + acc }
 
--- mana ∷ ∀ m a. Monad m => ParserT String m a -> ParserT Mana m a
 mana ∷ ∀ m. Monad m => ParserT String m Mana
 mana = do
   (string "U" <#> const (Mana (fillUp2 { blue: Just 1 })))

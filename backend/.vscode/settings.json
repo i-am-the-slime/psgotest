@@ -17,4 +17,5 @@
     ],
     "files.autoSaveDelay": 10000,
     "purescript.buildCommand": "spago build -- -g corefn --json-errors",
+    "purescript.codegenTargets": []
 }

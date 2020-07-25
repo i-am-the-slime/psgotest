@@ -123,6 +123,19 @@ let upstream =
 
 let overrides = {=}
 
-let additions = {=}
+let additions = {
+     react-basic-storybook =
+         { dependencies =
+             [ "console"
+             , "effect"
+             , "psci-support"
+             , "react-basic-hooks"
+             ]
+         , repo =
+             "https://github.com/i-am-the-slime/purescript-react-basic-storybook.git"
+         , version =
+             "75db8aaa6ed2b3d0343246393d8ac76e94662135"
+         }
+}
 
 in  upstream // overrides // additions

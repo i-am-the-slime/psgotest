@@ -1,8 +1,7 @@
 module Main where
 
 import Prelude
-
-import Card.Component (mkCard)
+import Cards.Component (mkCards)
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Exception (throw)
@@ -15,13 +14,13 @@ import Web.HTML (window)
 import Web.HTML.HTMLDocument (toNonElementParentNode)
 import Web.HTML.Window (document)
 
-main :: Effect Unit
+main ∷ Effect Unit
 main = do
   container <- getElementById "container" =<< (map toNonElementParentNode $ document =<< window)
   case container of
     Nothing -> throw "Container element not found."
-    Just c  -> do
-      card <- mkCard { fetch: fetch windowFetch }
-      let app = element card {}
+    Just c -> do
+      card <- mkCards { fetch: fetch windowFetch }
+      let
+        app = element card {}
       render app c
-

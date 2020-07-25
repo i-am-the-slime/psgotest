@@ -14,6 +14,7 @@ You can edit this file as you like.
     , "random"
     , "record-extra"
     , "simple-json"
+    , "unicode"
     ]
 , packages =
     ./packages.dhall

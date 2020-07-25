@@ -8,8 +8,11 @@ You can edit this file as you like.
     , "debug"
     , "effect"
     , "milkis"
+    , "parsing"
     , "psci-support"
     , "react-basic-hooks"
+    , "react-basic-storybook"
+    , "record-extra"
     , "remotedata"
     , "simple-json"
     ]
